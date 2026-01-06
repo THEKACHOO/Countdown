@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE KACHOO - Exclusive Countdown</title>
+    <link rel="icon" type="image/x-icon" href="https://thekachoo.github.io/Home/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 25%, #f5f5f5 50%, #ffffff 75%, #f8f8f8 100%);
+            color: #111;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+                linear-gradient(45deg, rgba(0, 0, 0, 0.01) 0%, transparent 100%);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .logo-container {
+            margin-bottom: 25px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .logo {
+            max-width: 280px;
+            height: auto;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+        }
+        
+        h1 {
+            font-size: 3.8rem;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #000 0%, #333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #555;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        
+        /* Countdown */
+        .countdown-section {
+            text-align: center;
+            padding: 50px 30px;
+            margin: 60px 0;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, transparent, #000, transparent);
+        }
+        
+        .countdown-title {
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #111;
+            letter-spacing: 3px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .countdown-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #000;
+        }
+        
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .countdown-box {
+            background: linear-gradient(145deg, #fff, #f5f5f5);
+            border-radius: 20px;
+            padding: 35px 20px;
+            min-width: 160px;
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0%, transparent 100%);
+            z-index: 0;
+        }
+        
+        .countdown-box:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        
+        .countdown-value {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #000;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .countdown-label {
+            font-size: 1.2rem;
+            color: #444;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .target-date {
+            font-size: 1.3rem;
+            color: #666;
+            margin-top: 30px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        /* QnA Section */
+        .qna-section {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 70px 0;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qna-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.02) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            text-align: center;
+            letter-spacing: 3px;
+            color: #111;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: #000;
+        }
+        
+        .qna-description {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #555;
+            line-height: 1.7;
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .qna-form {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        label {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        input, textarea {
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            color: #111;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: #888;
+        }
+        
+        textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+        
+        .anon-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .anon-option input {
+            width: 22px;
+            height: 22px;
+            accent-color: #000;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #111, #333);
+            color: #fff;
+            border: none;
+            padding: 20px;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Giveaway Section */
+        .giveaway-section {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 70px 0;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .giveaway-section::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.02) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-30%, 30%);
+        }
+        
+        .giveaway-description {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #555;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .prizes-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            perspective: 1000px;
+        }
+        
+        .prize-card {
+            background: linear-gradient(145deg, #fff, #f5f5f5);
+            border-radius: 20px;
+            padding: 35px 25px;
+            width: 270px;
+            text-align: center;
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+        
+        .prize-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, transparent, #000, transparent);
+        }
+        
+        .prize-card:hover {
+            transform: translateY(-20px) rotateX(5deg);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        
+        .prize-card.main-prize {
+            transform: scale(1.08);
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            animation: pulse-glow 3s infinite alternate;
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 0 0 rgba(0, 0, 0, 0.1); }
+            100% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 0 30px rgba(0, 0, 0, 0.1); }
+        }
+        
+        .prize-card.main-prize:hover {
+            transform: scale(1.1) translateY(-15px) rotateX(5deg);
+        }
+        
+        .prize-icon {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            color: #000;
+            opacity: 0.9;
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.1));
+        }
+        
+        .prize-title {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: #000;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .prize-amount {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            letter-spacing: 1px;
+        }
+        
+        .car-image-container {
+            width: 100%;
+            height: 160px;
+            margin-top: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #f0f0f0, #fafafa);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .car-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #eee 25%, #f8f8f8 25%, #f8f8f8 50%, #eee 50%, #eee 75%, #f8f8f8 75%);
+            background-size: 40px 40px;
+            animation: moving-stripes 2s linear infinite;
+        }
+        
+        @keyframes moving-stripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+        
+        .car-placeholder span {
+            color: #000;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 70px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            color: #666;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #000, transparent);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .countdown-box {
+                min-width: 140px;
+                padding: 30px 15px;
+            }
+            
+            .countdown-value {
+                font-size: 4rem;
+            }
+            
+            .prize-card {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .countdown-box {
+                min-width: 120px;
+                padding: 25px 10px;
+            }
+            
+            .countdown-value {
+                font-size: 3.5rem;
+            }
+            
+            .countdown-label {
+                font-size: 1rem;
+            }
+            
+            .prize-card.main-prize {
+                transform: none;
+            }
+            
+            .prize-card.main-prize:hover {
+                transform: translateY(-20px) rotateX(5deg);
+            }
+            
+            .qna-section, .giveaway-section {
+                padding: 40px 25px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .countdown-box {
+                min-width: 100px;
+                padding: 20px 8px;
+            }
+            
+            .countdown-value {
+                font-size: 2.8rem;
+            }
+            
+            .countdown-label {
+                font-size: 0.9rem;
+            }
+            
+            .countdown-title, .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .prize-amount {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="https://thekachoo.github.io/Home/logo-thekachoo.png" alt="Kachoo Logo" class="logo">
+            </div>
+            <h1>THE KACHOO</h1>
+            <div class="subtitle">Exclusive Countdown to Grand Launch</div>
+        </header>
+        
+        <main>
+            <!-- Countdown Section -->
+            <section class="countdown-section">
+                <h2 class="countdown-title">GRAND LAUNCH COUNTDOWN</h2>
+                <div class="countdown-container">
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="days">00</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="hours">00</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="seconds">00</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+                <div class="target-date">January 11, 2026 - 12:00 PM</div>
+            </section>
+            
+            <!-- QnA Section -->
+            <section class="qna-section">
+                <h2 class="section-title">Q&A SECTION</h2>
+                <p class="qna-description">
+                    Have questions about THE KACHOO? Submit them here!<br>
+                    Answers will be provided on January 10, 2026 during the official launch event.
+                </p>
+                
+                <form class="qna-form" id="qnaForm">
+                    <div class="form-group">
+                        <label for="senderName">Sender Name</label>
+                        <input type="text" id="senderName" name="senderName" placeholder="Enter your name" required>
+                        <div class="anon-option">
+                            <input type="checkbox" id="anonymous" name="anonymous">
+                            <label for="anonymous">Submit as Anonymous</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="question">Your Question</label>
+                        <textarea id="question" name="question" placeholder="Type your question here..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">SUBMIT QUESTION</button>
+                </form>
+            </section>
+            
+            <!-- Giveaway Section -->
+            <section class="giveaway-section">
+                <h2 class="section-title">EXCLUSIVE GIVEAWAY</h2>
+                <p class="giveaway-description">
+                    Participate in the Q&A for a chance to win amazing prizes!<br>
+                    Winners will be announced along with Q&A answers on January 10, 2026.
+                </p>
+                
+                <div class="prizes-container">
+                    <div class="prize-card main-prize">
+                        <div class="prize-icon">🚗</div>
+                        <h3 class="prize-title">Grand Prize</h3>
+                        <div class="prize-amount">Sedan Car</div>
+                        <p>Premium sedan for 1 lucky winner</p>
+                        <div class="car-image-container">
+                            <div class="car-placeholder">
+                                <span>Sedan Car</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="prize-card">
+                        <div class="prize-icon">🏅</div>
+                        <h3 class="prize-title">Second Prize</h3>
+                        <div class="prize-amount">Rp 30,000,000</div>
+                        <p>Cash prize for 1 winner</p>
+                    </div>
+                    
+                    <div class="prize-card">
+                        <div class="prize-icon">🥈</div>
+                        <h3 class="prize-title">Third Prize</h3>
+                        <div class="prize-amount">Rp 10,000,000</div>
+                        <p>Cash prize for 2 winners</p>
+                    </div>
+                    
+                    <div class="prize-card">
+                        <div class="prize-icon">🥉</div>
+                        <h3 class="prize-title">Fourth Prize</h3>
+                        <div class="prize-amount">Rp 5,000,000</div>
+                        <p>Cash prize for 3 winners</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>This website is for roleplay purposes only.</p>
+            <p>THE KACHOO © 2025-2026. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Countdown Timer
+        const countdownDate = new Date("January 11, 2026 12:00:00").getTime();
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+            
+            // Redirect when countdown ends
+            if (distance < 0) {
+                window.location.href = "https://thekachoo.github.io/Home/index.html";
+                return;
+            }
+            
+            // Calculate time units
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Update display
+            document.getElementById("days").textContent = days.toString().padStart(2, '0');
+            document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+            
+            // Add subtle animation to changing numbers
+            const countdownValues = document.querySelectorAll('.countdown-value');
+            countdownValues.forEach(value => {
+                value.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    value.style.transform = 'scale(1)';
+                }, 150);
+            });
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+        
+        // Add floating animation to prize cards
+        const prizeCards = document.querySelectorAll('.prize-card:not(.main-prize)');
+        prizeCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.2}s`;
+        });
+        
+        // QnA Form Submission
+        document.getElementById('qnaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const senderName = document.getElementById('senderName').value;
+            const question = document.getElementById('question').value;
+            const isAnonymous = document.getElementById('anonymous').checked;
+            
+            // Simulate sending to Google Sheets
+            const finalName = isAnonymous ? "Anonymous" : senderName;
+            const timestamp = new Date().toLocaleString('en-US');
+            
+            console.log("Data to be sent to spreadsheet:");
+            console.log("Timestamp:", timestamp);
+            console.log("Sender Name:", finalName);
+            console.log("Question:", question);
+            
+            // Show success message with animation
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = "SUBMITTED!";
+            submitBtn.style.background = "linear-gradient(to right, #222, #444)";
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = "linear-gradient(to right, #111, #333)";
+            }, 2000);
+            
+            // Reset form
+            document.getElementById('qnaForm').reset();
+            document.getElementById('senderName').disabled = false;
+            document.getElementById('senderName').placeholder = "Enter your name";
+        });
+        
+        // Anonymous checkbox functionality
+        document.getElementById('anonymous').addEventListener('change', function() {
+            const nameInput = document.getElementById('senderName');
+            if (this.checked) {
+                nameInput.disabled = true;
+                nameInput.placeholder = "Anonymous";
+                nameInput.value = "";
+            } else {
+                nameInput.disabled = false;
+                nameInput.placeholder = "Enter your name";
+            }
+        });
+        
+        // Add scroll animation to elements
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe sections for animation
+        document.querySelectorAll('.countdown-section, .qna-section, .giveaway-section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
